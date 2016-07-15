@@ -1,8 +1,5 @@
-FROM ubuntu:14.04
+FROM java:openjdk-8-jre-alpine
 MAINTAINER Usman Ismail "usman@techtraits.com"
-
-RUN apt-get update && apt-get clean
-RUN apt-get install -q -y openjdk-7-jre-headless && apt-get clean
 
 ADD https://github.com/scobal/seyren/releases/download/1.4.0/seyren-web-1.4.0.jar /opt/seyren.jar
 ADD run-seyren.sh /usr/bin/run-seyren.sh
