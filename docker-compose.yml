@@ -10,8 +10,6 @@ seyren:
     - "8080:8080"
   links:
     - mongodb
-  env_file:
-    - ./.env
   environment:
       MONGO_URL: mongodb://mongodb:27017/seyren
       SEYREN_URL: http://seyren:8080/seyren
@@ -19,8 +17,10 @@ seyren:
       # GRAPHITE_URL: http://graphite
       # GRAPHITE_USERNAME: guest
       # GRAPHITE_PASSWORD: guest
+      GRAPHITE_REFRESH: 60000
+      GRAPHITE_CONNECTION_REQUEST_TIMEOUT: 300000
+      GRAPHITE_CONNECT_TIMEOUT: 300000
+      GRAPHITE_SOCKET_TIMEOUT: 300000
+      SMTP_HOST: localhost
   volumes:
     - ./logs:/var/log/seyren
-
-
-
