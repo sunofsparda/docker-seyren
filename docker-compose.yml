@@ -1,26 +1,33 @@
-mongodb:
-  image: mongo
-  volumes:
-     - ./mongodb:/data/db
-  command: "mongod --smallfiles"
+version: "3"
+services:
 
-seyren:
-  build: .
-  ports:
-    - "8080:8080"
-  links:
-    - mongodb
-  environment:
-      MONGO_URL: mongodb://mongodb:27017/seyren
-      SEYREN_URL: http://seyren:8080/seyren
-      SEYREN_LOG_PATH: /var/log/seyren/
-      # GRAPHITE_URL: http://graphite
-      # GRAPHITE_USERNAME: guest
-      # GRAPHITE_PASSWORD: guest
+  mongodb:
+    image: mongo:3.2
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb/data_db:/data/db
+    command: "mongod --smallfiles"
+
+  seyren:
+    image: acherlyonok/seyren:1.5.0
+    ports:
+      - "8080:8080"
+    links:
+      - mongodb
+      - graphite
+    environment:
+      GRAPHITE_URL: http://graphite
+      GRAPHITE_USERNAME: guest
+      GRAPHITE_PASSWORD: guest
       GRAPHITE_REFRESH: 60000
       GRAPHITE_CONNECTION_REQUEST_TIMEOUT: 300000
       GRAPHITE_CONNECT_TIMEOUT: 300000
       GRAPHITE_SOCKET_TIMEOUT: 300000
+      MONGO_URL: mongodb://mongodb:27017/seyren
+      SEYREN_URL: http://localhost:8080/seyren
+      SEYREN_LOG_PATH: /var/log/seyren/
       SMTP_HOST: localhost
-  volumes:
-    - ./logs:/var/log/seyren
+    volumes:
+      - ./seyren/logs:/var/log/seyren
+    restart: unless-stopped
